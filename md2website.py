@@ -10,9 +10,7 @@
 import os
 import sys
 import re
-import shutil
 import markdown
-import sass
 from natsort import natsorted
 from datetime import datetime
 # syntax highlight
@@ -55,30 +53,30 @@ def write_header(file, title="md2website", root=0):
     file.write("<html lang='en'>")
     file.write("<head>")
     # favicon
-    file.write(f"""<link rel="icon" href="{ FAVICON if not FAVICON == "" else "data:," }">""")
+    file.write(f"""<link rel="icon" href="{FAVICON if not FAVICON == "" else "data:,"}">""")
     # title
-    file.write(f"<title>{ PAGE_TITLE }</title>")
+    file.write(f"<title>{PAGE_TITLE}</title>")
     # meta
     file.write("<meta charset='utf-8'>")
     file.write("<meta name='viewport' content='width=device-width, initial-scale=1'>")
-    file.write(f"""<meta name='author' content='{ AUTHOR }'>""")
-    file.write(f"""<meta name='description' content="{ DESCRIPTION }">""")
-    file.write(f"<meta name='theme-color' content='{ APP_THEME }'>")
-    file.write(f"<meta name='application-name' content='{ APP_NAME }'>")
-    file.write(f"""<meta name='apple-mobile-web-app-title' content="{ PAGE_TITLE }">""")
+    file.write(f"""<meta name='author' content='{AUTHOR}'>""")
+    file.write(f"""<meta name='description' content="{DESCRIPTION}">""")
+    file.write(f"<meta name='theme-color' content='{APP_THEME}'>")
+    file.write(f"<meta name='application-name' content='{APP_NAME}'>")
+    file.write(f"""<meta name='apple-mobile-web-app-title' content="{PAGE_TITLE}">""")
     file.write("<meta name='apple-mobile-web-app-capable' content='yes'>")
     file.write("<meta name='mobile-web-app-capable' content='yes'>")
-    file.write(f"<meta name='apple-mobile-web-app-status-bar-style' content='{ APP_THEME }'>")
+    file.write(f"<meta name='apple-mobile-web-app-status-bar-style' content='{APP_THEME}'>")
     # social
     file.write("<meta property='og:type' content='website'>")
-    file.write(f"""<meta property='og:title' content="{ PAGE_TITLE }">""")
-    file.write(f"""<meta property='og:description' content="{ DESCRIPTION }">""")
-    file.write(f"<meta property='og:image' content='/{ SOCIAL_IMAGE }'>")
+    file.write(f"""<meta property='og:title' content="{PAGE_TITLE}">""")
+    file.write(f"""<meta property='og:description' content="{DESCRIPTION}">""")
+    file.write(f"<meta property='og:image' content='/{SOCIAL_IMAGE}'>")
     # twitter
     file.write("<meta name='twitter:card' content='summary'>")
-    file.write(f"""<meta name='twitter:title' content="{ PAGE_TITLE }">""")
-    file.write(f"""<meta name='twitter:description' content="{ DESCRIPTION }">""")
-    file.write(f"<meta name='twitter:image' content='/{ SOCIAL_IMAGE }'>")
+    file.write(f"""<meta name='twitter:title' content="{PAGE_TITLE}">""")
+    file.write(f"""<meta name='twitter:description' content="{DESCRIPTION}">""")
+    file.write(f"<meta name='twitter:image' content='/{SOCIAL_IMAGE}'>")
     # load font
     distance_from_root = len(file.name.split("dist/")[1].split("/")) - 1
     file.write(f"""
@@ -95,11 +93,29 @@ def write_header(file, title="md2website", root=0):
             font-weight: bold;
             font-style: normal;
         }}
+        @font-face {{
+            font-family: "LibreBaskerville";
+            src: url("{ '../' * distance_from_root }__static/LibreBaskerville-Regular.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }}
+        @font-face {{
+            font-family: "LibreBaskerville";
+            src: url("{ '../' * distance_from_root }__static/LibreBaskerville-Bold.ttf") format("truetype");
+            font-weight: bold;
+            font-style: normal;
+        }}
+        @font-face {{
+            font-family: "LibreBaskerville";
+            src: url("{ '../' * distance_from_root }__static/LibreBaskerville-Italic.ttf") format("truetype");
+            font-weight: normal;
+            font-style: italic;
+        }}
         </style>
     """)
     # inline css
-    with open("reset.css", "r") as reset: file.write(f"<style>{ reset.read() }</style>")
-    with open("style.css", "r") as style: file.write(f"<style>{ style.read() }</style>")
+    # with open("reset.css", "r") as reset: file.write(f"<style>{ reset.read() }</style>")
+    with open("old_style.css", "r") as style: file.write(f"<style>{style.read()}</style>")
     file.write("</head>")
     # -------------------------------------------
     file.write("<body>")
@@ -108,18 +124,26 @@ def write_header(file, title="md2website", root=0):
     # page
     file.write("<div class='page'>")
     # nav
-    if os.path.exists(f"{ SOURCE_PATH }/nav.md"):
-        nav_file = open(f"{ SOURCE_PATH }/nav.md", "r")
+    if os.path.exists(f"{SOURCE_PATH}/nav.md"):
+        nav_file = open(f"{SOURCE_PATH}/nav.md", "r")
         nav_content = nav_file.read()
         nav_file.close()
         if len(nav_content) > 0:
             file.write("<div class='nav no-print'>")
 
             nav_content_html = markdown.markdown(nav_content)
+            # nav_content_html = nav_content_html.replace("</h3>", "") + """
+            #     <label class="invert-toggle-label">
+            #         <input type="checkbox" class="invert-toggle">
+            #     </label>
+            # """.replace("    ", "")
             nav_content_html = nav_content_html.replace("</h3>", "") + """
-                <label class="invert-toggle-label">
-                    <input type="checkbox" class="invert-toggle">
-                </label>
+                <span class='toggle-wrapper'>
+                    <input type="checkbox" class="sr-only" id="theme">
+                    <label for="theme" class="toggle">
+                        <span>Theme</span>
+                    </label>
+                </span>
             """.replace("    ", "")
             nav_content_html = nav_content_html + "</h3>"
             
@@ -143,16 +167,17 @@ def write_footer(file):
     
     file.write("</div>") # ./page
     # end of file
-    file.write("""
-        <script>
-            const invertToggle = document.querySelector(".invert-toggle");
-            function onInvertToggle() {
-                document.documentElement.classList.toggle("invert", invertToggle.checked);
-            }
-            invertToggle.addEventListener("change", onInvertToggle);
-            onInvertToggle();
-        </script>
-    """)
+    # file.write("""
+    #     <script>
+    #         const invertToggle = document.querySelector(".invert-toggle");
+    #         function onInvertToggle() {
+    #             document.documentElement.classList.toggle("invert", invertToggle.checked);
+    #         }
+    #         invertToggle.addEventListener("change", onInvertToggle);
+    #         onInvertToggle();
+    #     </script>
+    # """)
+    with open("main.js", "r") as script: file.write(f"<script>{script.read()}</script>")
     file.write("</body>")
     file.write("</html>")
 
@@ -194,7 +219,7 @@ def generate_checklist_from_list(file_content):
         else:
             result.append(line)
 
-    return "".join(result)
+    return "\n".join(result)
 
 def generate_and_inject_index(file_content):
     # generate anchors
@@ -340,56 +365,56 @@ def main_driver():
                                     # title
                                     try:
                                         post_title = post_content.split("\n")[0].split("# ")[1]
-                                        post_content = "\n".join(post_content.split("\n")[2:]) # skip two lines (assuming empty line after each)
+                                        # post_content = "\n".join(post_content.split("\n")[2:]) # skip two lines (assuming empty line after each)
                                     except: pass
                                     
                                     # date
                                     try:
-                                        date = post_content.split("\n")[0].split("*")[1]
+                                        date = post_content.split("\n")[2].split("*")[1]
                                             
                                         date_formatted = datetime.strptime(date, "%B %d, %Y")
                                         date_formatted = date_formatted.strftime("%Y-%m-%d")
 
                                         date_is_outdated = True if datetime.strptime(date, "%B %d, %Y").year + 2 < datetime.now().year else False
                                             
-                                        post_content = "\n".join(post_content.split("\n")[2:])
+                                        # post_content = "\n".join(post_content.split("\n")[2:])
                                     except: pass
                                     
-                                    # subtitle
-                                    try:
-                                        post_subtitle = post_content.split("\n")[0]
-                                        if "---" in post_subtitle:
-                                            post_subtitle = None
-                                        else:
-                                            post_subtitle = markdown.markdown(post_subtitle).replace("<p>", "").replace("</p>", "")
-                                            post_content = "\n".join(post_content.split("\n")[2:])
-                                    except: pass
+                                    # # subtitle
+                                    # try:
+                                    #     post_subtitle = post_content.split("\n")[0]
+                                    #     if "---" in post_subtitle:
+                                    #         post_subtitle = None
+                                    #     else:
+                                    #         post_subtitle = markdown.markdown(post_subtitle).replace("<p>", "").replace("</p>", "")
+                                    #         # post_content = "\n".join(post_content.split("\n")[2:])
+                                    # except: pass
                                     
                                     # create post title
-                                    post_content = f"""
-                                        <table class="header">
-                                            <tbody>
-                                                <tr>
-                                                    <td colspan="2" rowspan="2" class="width-auto">
-                                                        <h1 class="title">{ post_title }</h1>
-                                                        <span class="subtitle">{ post_subtitle if not post_subtitle == None else "" }</span>
-                                                    </td>
-                                                    <th>Date</th>
-                                                    <td class="width-min">
-                                                        <time style="white-space: pre;">{ "<mark>" if date_is_outdated else "" }{ date_formatted }{ "</mark>" if date_is_outdated else "" }</time>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Author</th>
-                                                    <td class="width-min">
-                                                        <a href="{ X_URL }" class="mono">
-                                                            <cite>{ AUTHOR }</cite>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    """.replace("    ", "") + post_content
+                                    # post_content = f"""
+                                    #     <table class="header">
+                                    #         <tbody>
+                                    #             <tr>
+                                    #                 <td colspan="2" rowspan="2" class="width-auto">
+                                    #                     <h1 class="title">{ post_title }</h1>
+                                    #                     <span class="subtitle">{ post_subtitle if not post_subtitle == None else "" }</span>
+                                    #                 </td>
+                                    #                 <th>Date</th>
+                                    #                 <td class="width-min">
+                                    #                     <time style="white-space: pre;">{ "<mark>" if date_is_outdated else "" }{ date_formatted }{ "</mark>" if date_is_outdated else "" }</time>
+                                    #                 </td>
+                                    #             </tr>
+                                    #             <tr>
+                                    #                 <th>Author</th>
+                                    #                 <td class="width-min">
+                                    #                     <a href="{ X_URL }" class="mono">
+                                    #                         <cite>{ AUTHOR }</cite>
+                                    #                     </a>
+                                    #                 </td>
+                                    #             </tr>
+                                    #         </tbody>
+                                    #     </table>
+                                    # """.replace("    ", "") + post_content
                                     
                                     # categories
                                     try: category, subcategory = root.split("/")[1], root.split("/")[2]
@@ -445,7 +470,7 @@ def main_driver():
                         except Exception as error: pass
                 
                 # write page title
-                dir_page.write(f"<h1>{dir_.lower()}</h1>")
+                dir_page.write(f"<h1>{dir_.title()}</h1>")
                 if FLAG_DESC: dir_page.write(f"<p>{FLAG_DESC}</p>")
                 
                 generate_post_index(dir_page, FLAG_SORT, FLAG_COL, posts_lst, posts_dict)
@@ -461,49 +486,49 @@ def main_driver():
                 file_name = file.split(".")[0]
                 
                 # create page
-                with open(f"{ DIST_PATH }/{ file_name }.html", "w+") as tmp_file:
-                    file = open(f"{ root }/{ file }", "r")
+                with open(f"{DIST_PATH}/{file_name}.html", "w+") as tmp_file:
+                    file = open(f"{root}/{file}", "r")
                     file_content = file.read()
-                    file_content = file_content.split("\n")
+                    # file_content = file_content.split("\n")
                     
-                    title = PAGE_TITLE # default title
+                    title = PAGE_TITLE # fallback title
 
                     # title
-                    try:
-                        if "#" in file_content[0]:
-                            title = file_content[0].split("# ")[1]
-                            # file_content = file_content[2:] # skip two lines (assuming empty line after each)
-                    except: pass
+                    # try:
+                    #     if "#" in file_content[0]:
+                    #         title = file_content[0].split("# ")[1]
+                    #         # file_content = file_content[2:] # skip two lines (assuming empty line after each)
+                    # except: pass
                     
-                    # date
-                    date = None
-                    date_formatted = None
-                    if not date:
-                        try:
-                            if "*" in file_content[0]:
-                                date = file_content[0].split("*")[1]
+                    # # date
+                    # date = None
+                    # date_formatted = None
+                    # if not date:
+                    #     try:
+                    #         if "*" in file_content[0]:
+                    #             date = file_content[0].split("*")[1]
                             
-                                date_formatted = datetime.strptime(date, "%B %d, %Y")
-                                date_formatted = date_formatted.strftime("%Y-%m-%d")
+                    #             date_formatted = datetime.strptime(date, "%B %d, %Y")
+                    #             date_formatted = date_formatted.strftime("%Y-%m-%d")
                             
-                                # file_content = file_content[2:] # skip two lines (assuming empty line after each)
-                        except: pass
+                    #             # file_content = file_content[2:] # skip two lines (assuming empty line after each)
+                    #     except: pass
                     
-                    # subtitle
-                    page_subtitle = None
-                    try:
-                        if "---" in file_content[0]:
-                            page_subtitle = None
-                            # file_content = file_content[2:]
-                        else:
-                            page_subtitle = markdown.markdown(file_content[0]).replace("<p>", "").replace("</p>", "")
-                            # file_content = file_content[2:]
-                    except: pass
+                    # # subtitle
+                    # page_subtitle = None
+                    # try:
+                    #     if "---" in file_content[0]:
+                    #         page_subtitle = None
+                    #         # file_content = file_content[2:]
+                    #     else:
+                    #         page_subtitle = markdown.markdown(file_content[0]).replace("<p>", "").replace("</p>", "")
+                    #         # file_content = file_content[2:]
+                    # except: pass
 
-                    # remove hr on some pages
-                    if "---" in file_content[0]: file_content = file_content[2:]
+                    # # remove hr on some pages
+                    # if "---" in file_content[0]: file_content = file_content[2:]
 
-                    file_content = "\n".join(file_content)
+                    # file_content = "\n".join(file_content)
 
                     # create page header
                     # if "index" not in file_name: file_content = f"""
@@ -532,23 +557,23 @@ def main_driver():
                     # """.replace("    ", "") + file_content
 
                     # add updated time
-                    if FLAG_TIME: file_content = re.sub(r"# (.*)", r"#\1" + f"\n*Updated {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*", file_content, count=1)
+                    # if FLAG_TIME: file_content = re.sub(r"# (.*)", r"#\1" + f"\n*Updated {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*", file_content, count=1)
                     # generate anchors and inject index
                     if FLAG_TOC: file_content = generate_and_inject_index(file_content)
                     # write header
                     write_header(tmp_file, title)
                     # replace -- with &mdash;
                     file_content = re.sub(r" -- (.*)", r" &mdash; \1", file_content)
-                    # convert markdown to html
-                    file_content = markdown.markdown(file_content, extensions=["fenced_code", "tables"])
+                    # convert markdown to html                    
+                    html_content = markdown.markdown(file_content, extensions=["fenced_code", "tables"])
                     # replace hr with border (for table of contents)
-                    file_content = replace_hr_with_border(file_content, toc=True)
+                    # file_content = replace_hr_with_border(file_content, toc=True)
                     # generate checklist from list
-                    file_content = generate_checklist_from_list(file_content)
+                    html_content = generate_checklist_from_list(html_content)
                     # syntax highlight
-                    file_content = syntax_highlight(file_content)
+                    html_content = syntax_highlight(html_content)
                     # write to file
-                    tmp_file.write(file_content)
+                    tmp_file.write(html_content)
                     # list recent posts on index
                     if POSTS_ON_INDEX and file_name == "index":
                         # tmp_file.write("<hr>")
@@ -563,4 +588,4 @@ if __name__ == "__main__":
         DIST_PATH = sys.path[0] + DIST_PATH
         main_driver()
     else:
-        print("SOURCE_PATH missing -> python md2website.py /website")
+        print("SOURCE_PATH missing -> python md2website.py /<website>")
