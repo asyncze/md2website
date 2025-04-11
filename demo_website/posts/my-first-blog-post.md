@@ -1,15 +1,15 @@
 # My first blog post
 
-*October 22, 2023*
-
-Hello and welcome to my new blog.
+*Oct 22, 2023*
 
 ---
 
-## This is a header
+## Hello there
 
-Write something cool here.
+Hello and welcome to my new blog.
 
 ### This is a smaller header
 
-Write something even cooler here.
+Write something cool here.
+
+*Updated on Apr 11, 2025*
