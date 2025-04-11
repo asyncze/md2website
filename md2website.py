@@ -55,7 +55,7 @@ def write_header(file, title="md2website", root=0):
     # favicon
     file.write(f"""<link rel="icon" href="{FAVICON if not FAVICON == "" else "data:,"}">""")
     # title
-    file.write(f"<title>{PAGE_TITLE}</title>")
+    file.write(f"<title>{title}</title>")
     # meta
     file.write("<meta charset='utf-8'>")
     file.write("<meta name='viewport' content='width=device-width, initial-scale=1'>")
@@ -331,7 +331,7 @@ def main_driver():
             
             # create page for folder
             with open(f"{DIST_PATH}/{dir_.lower()}.html", "w+") as dir_page:
-                write_header(dir_page, title=dir_)
+                write_header(dir_page, title=dir_.title())
                 
                 # TODO: refactor this to single data structure and use flags to set ordering? (by date, category, etc)
                 
@@ -489,16 +489,17 @@ def main_driver():
                 with open(f"{DIST_PATH}/{file_name}.html", "w+") as tmp_file:
                     file = open(f"{root}/{file}", "r")
                     file_content = file.read()
-                    # file_content = file_content.split("\n")
                     
                     title = PAGE_TITLE # fallback title
 
                     # title
-                    # try:
-                    #     if "#" in file_content[0]:
-                    #         title = file_content[0].split("# ")[1]
-                    #         # file_content = file_content[2:] # skip two lines (assuming empty line after each)
-                    # except: pass
+                    try:
+                        first_lines = file_content.split("\n")[:4]
+                        for line in first_lines:
+                            if "#" in line:
+                                title = line.split("# ")[1]
+                                break
+                    except Exception as e: print(e)
                     
                     # # date
                     # date = None
@@ -528,8 +529,6 @@ def main_driver():
                     # # remove hr on some pages
                     # if "---" in file_content[0]: file_content = file_content[2:]
 
-                    # file_content = "\n".join(file_content)
-
                     # create page header
                     # if "index" not in file_name: file_content = f"""
                     #     <table class="header">
@@ -556,8 +555,6 @@ def main_driver():
                     #     </table>
                     # """.replace("    ", "") + file_content
 
-                    # add updated time
-                    # if FLAG_TIME: file_content = re.sub(r"# (.*)", r"#\1" + f"\n*Updated {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*", file_content, count=1)
                     # generate anchors and inject index
                     if FLAG_TOC: file_content = generate_and_inject_index(file_content)
                     # write header
@@ -575,9 +572,7 @@ def main_driver():
                     # write to file
                     tmp_file.write(html_content)
                     # list recent posts on index
-                    if POSTS_ON_INDEX and file_name == "index":
-                        # tmp_file.write("<hr>")
-                        generate_post_index(tmp_file, FLAG_SORT, FLAG_COL, GLOBAL_POSTS)
+                    if POSTS_ON_INDEX and file_name == "index": generate_post_index(tmp_file, FLAG_SORT, FLAG_COL, GLOBAL_POSTS)
                     if FLAG_COL: tmp_file.write("</div>")
                     write_footer(tmp_file)
                     file.close()
@@ -588,4 +583,4 @@ if __name__ == "__main__":
         DIST_PATH = sys.path[0] + DIST_PATH
         main_driver()
     else:
-        print("SOURCE_PATH missing -> python md2website.py /<website>")
+        print("SOURCE_PATH missing : python md2website.py /<website>")
