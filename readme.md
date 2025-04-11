@@ -1,10 +1,6 @@
 
 # md2website: markdown to static website builder
 
-Example websites:
-
-- [asyncze.com](https://asyncze.com)
-
 ## Usage
 
 Change default config
