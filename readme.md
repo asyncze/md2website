@@ -11,7 +11,7 @@ Change default config
 
 ```python
 PAGE_TITLE                  = "Michael (@asyncze)"
-POSTS_ON_INDEX              = True
+POSTS_ON_INDEX              = False
 DIST_PATH                   = "/dist"
 LOAD_FOLDER                 = False
 LOAD_FOLDER_FLAGS           = False
