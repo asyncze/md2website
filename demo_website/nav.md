@@ -1,1 +1,1 @@
-### [Home](/index.html) [About](/about.html) [Posts](/posts.html)
+[Home](/index.html) [About](/about.html) [Posts](/posts.html)
