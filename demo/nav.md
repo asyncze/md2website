@@ -1,1 +1,0 @@
-[Home](/index.html) [Posts](/posts.html) [Files](/files.html) [About](/about.html)
