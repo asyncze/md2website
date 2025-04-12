@@ -110,8 +110,9 @@ body {
 }
 h1, h2, h3, h4, h5, h6 {
     font-weight: var(--font-weight-bold);
-    margin: var(--line-height) 0 var(--line-height);
     line-height: var(--line-height);
+    margin: calc(var(--line-height) * 2) 0 var(--line-height);
+    color: var(--color-black);
 }
 h1 {
     font-size: 2rem;
@@ -175,7 +176,7 @@ p {
     word-break: break-word;
     word-wrap: break-word;
     hyphens: auto;
-    margin-bottom: var(--line-height);
+    margin: var(--line-height) 0 var(--line-height);
 }
 strong {
     font-weight: var(--font-weight-bold);
@@ -222,6 +223,24 @@ code {
     font-size: calc(var(--font-size)-2);
     color: var(--color-pink);
 }
+
+ul {
+    margin: var(--line-height) 0 var(--line-height);
+}
+
+p + ul, h3 + ul {
+    margin-top: -1rem;
+}
+
+ul li ul {
+    margin: 0.25rem 0;
+}
+
+li {
+    margin-bottom: 0.25rem;
+    line-height: var(--line-height);
+}
+
 ul.checklist, ul.toc {
     list-style: none;
     padding: 0 0 0 1rem;
@@ -243,7 +262,7 @@ ul.checklist .round label {
     width: 1rem;
 }
 
-/*.round label:after {
+/*ul.checklist .round label:after {
     border: 2px solid #fff;
     border-top: none;
     border-right: none;
@@ -268,6 +287,7 @@ ul.checklist .round input[type="checkbox"]:checked + label {
 ul.checklist .round input[type="checkbox"]:checked + label:after {
     opacity: 1;
 }
+
 .progress-wrapper {
     border: var(--border-thickness) solid var(--text-color);
     height: var(--line-height);
@@ -290,52 +310,17 @@ ul.checklist .round input[type="checkbox"]:checked + label:after {
     margin: 3px;
     border-radius: 1rem;
 }
-p + ul, h3 + ul {
-    margin-top: -1rem;
-}
-
-/*ul {
-    margin: 2rem 0;
-}*/
-/*ul.columns {
-    column-gap: 2rem;
-}*/
-/*ul p.label {
-    margin: 0;
-    margin-left: -1.5rem;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    font-size: 80%;
-    color: var(--color-grey);
-}
-ul.border {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border-radius: 1rem;
-    border: 1px solid;
-    border-color: var(--color-grey);
-}*/
-
-ul li ul {
-    margin: 0.25rem 0;
-}
-/*dl {
-    list-style: none;
-}*/
-li {
-    margin-bottom: 0.25rem;
-    line-height: 1.5rem;
-}
 
 table {
     border-collapse: collapse;
 }
+
 table:not(.header) td {
     padding: 1rem;
     border: 1px solid;
     border-color: var(--color-grey);
+    margin-bottom: var(--line-height);
 }
-
 table.header {
     top: calc(var(--line-height) / 2);
     width: 100%;
@@ -346,8 +331,8 @@ table.header {
 table.header h1 {
     margin: 0;
 }
-table.header tr td:last-child {
-    text-align: right;
+table.header th, table.header tr td:last-child {
+    text-align: end;
 }
 
 hr {
@@ -355,7 +340,6 @@ hr {
     border-style: solid;
     border-color: var(--color-grey-light);
 }
-
 mark {
     padding: 2px 8px;
     font-weight: var(--font-weight-bold);
@@ -426,7 +410,7 @@ mark {
     width: 20px;
     height: 20px;
     display: block;
-    background: var(--color-dark);
+    background: var(--color-black);
     border-radius: 10px;
     transition: all 0.2s ease;
 }
@@ -489,7 +473,7 @@ mark {
 </li>
 </ul>
 <h2>Hello there <a name="Hello there"></a> <a class="anchor" href="#Hello there">#</a></h2>
-<p>Hello and welcome to my new blog.</p>
+<p>Hello and welcome to my new blog. This is what a <a href="#">link</a> looks like.</p>
 <div class="highlight"><pre><span></span><span class="c1">-- Comment</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">PI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.14159</span>
 
@@ -513,6 +497,24 @@ mark {
 <li>Second</li>
 <li>Last</li>
 </ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>One</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Two</td>
+</tr>
+</tbody>
+</table>
 <h3>This is a smaller header <a name="This is a smaller header"></a> <a class="anchor" href="#This is a smaller header">#</a></h3>
 <p>Write something else here.</p>
 <div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Class</span><span class="p">:</span>
