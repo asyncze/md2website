@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     // toggle theme
     try {
-        var theme = document.querySelector("#theme");
+        var theme = document.querySelector("#dark-mode-toggle");
         theme.addEventListener("change", function() {
             if (theme.checked == true) {
                 theme.checked = true;
@@ -23,19 +23,19 @@ document.addEventListener("DOMContentLoaded", function() {
     // check local storage
     if (localStorage.getItem("dark") == "true") {
         document.querySelector("html").classList = "dark";
-        var theme = document.querySelector("#theme");
+        var theme = document.querySelector("#dark-mode-toggle");
         theme.checked = true;
     } else {
         // init local storage
         if (document.querySelector("html").classList.contains("dark")) {
             document.querySelector("html").classList = "dark";
-            var theme = document.querySelector("#theme");
+            var theme = document.querySelector("#dark-mode-toggle");
             theme.checked = true;
             // persist
             localStorage.setItem("dark", "true");
         } else {
             document.querySelector("html").classList = "";
-            var theme = document.querySelector("#theme");
+            var theme = document.querySelector("#dark-mode-toggle");
             theme.checked = false;
             // persist
             localStorage.setItem("dark", "false");
