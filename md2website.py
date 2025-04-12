@@ -114,8 +114,7 @@ def write_header(file, title="md2website", root=0):
         </style>
     """)
     # inline css
-    # with open("reset.css", "r") as reset: file.write(f"<style>{ reset.read() }</style>")
-    with open("old_style.css", "r") as style: file.write(f"<style>{style.read()}</style>")
+    with open("style.css", "r") as style: file.write(f"<style>{style.read()}</style>")
     file.write("</head>")
     # -------------------------------------------
     file.write("<body>")
@@ -132,20 +131,7 @@ def write_header(file, title="md2website", root=0):
             file.write("<div class='nav'>")
 
             nav_content_html = markdown.markdown(nav_content)
-            # nav_content_html = nav_content_html.replace("</h3>", "") + """
-            #     <label class="invert-toggle-label">
-            #         <input type="checkbox" class="invert-toggle">
-            #     </label>
-            # """.replace("    ", "")
             nav_content_html = nav_content_html.replace("</h3>", "")
-            # nav_content_html = nav_content_html + """
-            #     <span class='toggle-wrapper'>
-            #         <input type="checkbox" class="sr-only" id="dark-mode-toggle">
-            #         <label for="dark-mode-toggle" class="toggle">
-            #             <span>Theme</span>
-            #         </label>
-            #     </span>
-            # """.replace("    ", "")
             nav_content_html = nav_content_html + """
                 <div class='toggle-wrapper'>
                     <input type='checkbox' id='dark-mode-toggle'>
@@ -153,9 +139,7 @@ def write_header(file, title="md2website", root=0):
                 </div>
             """.replace("    ", "")
             nav_content_html = nav_content_html + "</h3>"
-            
             file.write(nav_content_html)
-            
             file.write("</div>")
         else:
             # empty nav for aligned padding across pages
@@ -173,17 +157,6 @@ def write_footer(file):
     # file.write("</div>")
     
     file.write("</div>") # ./page
-    # end of file
-    # file.write("""
-    #     <script>
-    #         const invertToggle = document.querySelector(".invert-toggle");
-    #         function onInvertToggle() {
-    #             document.documentElement.classList.toggle("invert", invertToggle.checked);
-    #         }
-    #         invertToggle.addEventListener("change", onInvertToggle);
-    #         onInvertToggle();
-    #     </script>
-    # """)
     with open("main.js", "r") as script: file.write(f"<script>{script.read()}</script>")
     file.write("</body>")
     file.write("</html>")
@@ -193,13 +166,10 @@ def sort_by_date_and_title(item): return (item["date"], item["title"])
 
 def generate_checklist_from_list(file_content):
     checklist = False
-    
     result = []
     for line in file_content.split("\n"):
         if line == "<!-- checklist -->": checklist = True
-        
-        if checklist == True and "<ul>" in line:
-            result.append("<ul class='checklist'>")
+        if checklist == True and "<ul>" in line: result.append("<ul class='checklist'>")
         elif checklist == True and "[X]" in line:
             line = line.split("[X]")[1].strip().replace("</li>", "")
             result.append(f"""
@@ -251,9 +221,7 @@ def generate_post_index(dir_page, FLAG_SORT, FLAG_COL, posts_lst=[], posts_dict=
     sorted_posts_lst = sorted(posts_lst, key=sort_by_date_and_title, reverse=True)
     # write posts_lst (list by date)
     dir_page.write("<dl>")
-    for post in sorted_posts_lst:
-        # dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a> <span class='' style='float:right;'><em>{datetime.date(post['date']).strftime('%B %d, %Y') if post['date'] else ''}</em></span></li>")
-        dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
+    for post in sorted_posts_lst: dir_page.write(f"<li><a href='{post['url']}.html'>{post['title']}</a></li>")
     dir_page.write("</dl>")
     # create list with categories for ordering
     category_list = sorted(posts_dict.keys())
@@ -264,8 +232,7 @@ def generate_post_index(dir_page, FLAG_SORT, FLAG_COL, posts_lst=[], posts_dict=
         for subcategory in posts_dict[category]:
             sorted_posts_dict = natsorted(posts_dict[category][subcategory], key=lambda item: item["title"])
             # subcategory name
-            if subcategory != "_root":
-                dir_page.write(f"<p id='{category.lower()}-{subcategory.replace(' ', '-').lower()}'>{subcategory.replace('-', ' ')}</p>")
+            if subcategory != "_root": dir_page.write(f"<p id='{category.lower()}-{subcategory.replace(' ', '-').lower()}'>{subcategory.replace('-', ' ')}</p>")
             # mulitple columns
             if FLAG_COL: dir_page.write(f"<dl class='columns' style='column-count:{FLAG_COL};'>")
             else: dir_page.write("<dl>")
@@ -376,16 +343,11 @@ def main_driver():
                                     try:
                                         post_title = post_content.split("\n")[0].split("# ")[1]
                                         post_content = "\n".join(post_content.split("\n")[2:]) # skip two lines (assuming empty line after each)
-
-                                        print(post_title)
-
                                     except Exception as e: print(e)
                                     
                                     # date
                                     try:
                                         date = post_content.split("\n")[0].split("*")[1]
-
-                                        print(date)
                                             
                                         date_formatted = datetime.strptime(date, "%B %d, %Y")
                                         date_formatted = date_formatted.strftime("%Y-%m-%d")
