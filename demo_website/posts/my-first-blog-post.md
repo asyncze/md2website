@@ -26,6 +26,12 @@ for i = 1, #numbers do
 end
 ```
 
+Here's a list of things to do:
+
+- First
+- Second
+- Last
+
 ### This is a smaller header
 
 Write something else here.
