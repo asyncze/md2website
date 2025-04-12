@@ -6,7 +6,7 @@
 
 ## Hello there
 
-Hello and welcome to my new blog.
+Hello and welcome to my new blog. This is what a [link](#) looks like.
 
 ```lua
 -- Comment
@@ -31,6 +31,11 @@ Here's a list of things to do:
 - First
 - Second
 - Last
+
+|     |       |
+| --- | ----- |
+| 1   | One   |
+| 2   | Two   |
 
 ### This is a smaller header
 
