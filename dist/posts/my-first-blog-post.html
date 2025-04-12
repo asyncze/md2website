@@ -207,7 +207,6 @@ img, video {
 .mono {
     font-family: var(--font-family-mono) !important;
 }
-
 details, pre {
     background: var(--color-pre);
     padding: 1rem;
@@ -223,17 +222,6 @@ code {
     font-size: calc(var(--font-size)-2);
     color: var(--color-pink);
 }
-
-/*pre code,
-.highlight pre,
-.monospace {
-    font-family: var(--font-family-mono);
-    font-size: calc(var(--font-size)-2);
-}*/
-/*.highlight {
-    line-height: 1.4;
-}*/
-
 ul.checklist, ul.toc {
     list-style: none;
     padding: 0 0 0 1rem;
@@ -256,17 +244,17 @@ ul.checklist .round label {
 }
 
 /*.round label:after {
-  border: 2px solid #fff;
-  border-top: none;
-  border-right: none;
-  content: "";
-  height: 6px;
-  left: 7px;
-  opacity: 0;
-  position: absolute;
-  top: 8px;
-  transform: rotate(-45deg);
-  width: 12px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-right: none;
+    content: "";
+    height: 6px;
+    left: 7px;
+    opacity: 0;
+    position: absolute;
+    top: 8px;
+    transform: rotate(-45deg);
+    width: 12px;
 }*/
 
 ul.checklist .round input[type="checkbox"] {
@@ -280,7 +268,6 @@ ul.checklist .round input[type="checkbox"]:checked + label {
 ul.checklist .round input[type="checkbox"]:checked + label:after {
     opacity: 1;
 }
-
 .progress-wrapper {
     border: var(--border-thickness) solid var(--text-color);
     height: var(--line-height);
@@ -303,19 +290,17 @@ ul.checklist .round input[type="checkbox"]:checked + label:after {
     margin: 3px;
     border-radius: 1rem;
 }
-
 p + ul, h3 + ul {
     margin-top: -1rem;
 }
 
-ul {
-/*    list-style: square;*/
+/*ul {
     margin: 2rem 0;
-}
-ul.columns {
+}*/
+/*ul.columns {
     column-gap: 2rem;
-}
-ul p.label {
+}*/
+/*ul p.label {
     margin: 0;
     margin-left: -1.5rem;
     margin-bottom: 1rem;
@@ -329,13 +314,14 @@ ul.border {
     border-radius: 1rem;
     border: 1px solid;
     border-color: var(--color-grey);
-}
+}*/
+
 ul li ul {
     margin: 0.25rem 0;
 }
-dl {
+/*dl {
     list-style: none;
-}
+}*/
 li {
     margin-bottom: 0.25rem;
     line-height: 1.5rem;
@@ -354,14 +340,9 @@ table.header {
     top: calc(var(--line-height) / 2);
     width: 100%;
     border-collapse: collapse;
-/*    margin: 0 0 calc(var(--line-height) * 2);*/
     margin: var(--line-height) 0 var(--line-height);
     margin-bottom: calc(var(--line-height) * 2);
 }
-/*table.header {
-    margin: var(--line-height) 0 var(--line-height);
-    margin-bottom: calc(var(--line-height) * 2);
-}*/
 table.header h1 {
     margin: 0;
 }
@@ -394,19 +375,19 @@ mark {
 
 /* code highlight */
 
-.highlight .k { color: var(--color-pink) !important; }
-.highlight .n { color: var(--color-dark) !important; }
-.highlight .kn { color: var(--color-dark) !important; }
+.highlight .k, .highlight .kd, .highlight .kr { color: var(--color-pink) !important; } /* keywords */
 
-.highlight .s1, .highlight .si { color: var(--color-grey) !important; }
+/*.highlight .n, .highlight .kn { color: var(--color-dark) !important; }*/
 
-.highlight .c1, .highlight .cm { color: var(--color-grey) !important; }
+.highlight .s1, .highlight .si, .highlight .sd { color: var(--color-grey) !important; } /* docstrings, f-strings */
 
-.highlight .mi { color: var(--color-blue) !important; }
+.highlight .c1, .highlight .cm { color: var(--color-grey) !important; } /* comments */
 
-.highlight .nf, .highlight .nb { color: var(--color-blue) !important; }
+/*.highlight .mi { color: var(--color-blue) !important; }*/
 
-.highlight .nc {
+.highlight .nf, .highlight .nb, .highlight .fm { color: var(--color-blue) !important; } /* functions */
+
+.highlight .nc { /* class */
     color: var(--color-blue) !important;
     font-weight: var(--font-weight-bold);
 }
@@ -526,6 +507,12 @@ mark {
 <span class="kr">end</span>
 </pre></div>
 
+<p>Here's a list of things to do:</p>
+<ul>
+<li>First</li>
+<li>Second</li>
+<li>Last</li>
+</ul>
 <h3>This is a smaller header <a name="This is a smaller header"></a> <a class="anchor" href="#This is a smaller header">#</a></h3>
 <p>Write something else here.</p>
 <div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Class</span><span class="p">:</span>
