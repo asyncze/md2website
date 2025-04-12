@@ -129,6 +129,7 @@ h2 .anchor, h3 .anchor, h4 .anchor, h5 .anchor, h6 .anchor {
 }
 h2:hover .anchor, h3:hover .anchor, h4:hover .anchor, h5:hover .anchor, h6:hover .anchor {
     display: inline-block;
+    border: 0;
 }
 a {
     text-decoration: none;
@@ -203,10 +204,6 @@ img, video {
     object-fit: contain;
     overflow: hidden;
 }
-/*img {
-    font-style: italic;
-    color: var(--text-color-alt);
-}*/
 .mono {
     font-family: var(--font-family-mono) !important;
 }
@@ -226,6 +223,7 @@ code {
     font-size: calc(var(--font-size)-2);
     color: var(--color-pink);
 }
+
 /*pre code,
 .highlight pre,
 .monospace {
@@ -236,12 +234,82 @@ code {
     line-height: 1.4;
 }*/
 
-p + ul:not(.border):not(.columns) {
+ul.checklist, ul.toc {
+    list-style: none;
+    padding: 0 0 0 1rem;
+}
+
+ul.checklist .round {
+    display: inline-block;
+    position: relative;
+}
+
+ul.checklist .round label {
+    background-color: var(--color-grey);
+    border-radius: 50%;
+    cursor: pointer;
+    height: 1rem;
+    left: 0;
+    position: absolute;
+    top: 3px;
+    width: 1rem;
+}
+
+/*.round label:after {
+  border: 2px solid #fff;
+  border-top: none;
+  border-right: none;
+  content: "";
+  height: 6px;
+  left: 7px;
+  opacity: 0;
+  position: absolute;
+  top: 8px;
+  transform: rotate(-45deg);
+  width: 12px;
+}*/
+
+ul.checklist .round input[type="checkbox"] {
+    visibility: hidden;
+}
+
+ul.checklist .round input[type="checkbox"]:checked + label {
+    background-color: var(--color-pink);
+}
+
+ul.checklist .round input[type="checkbox"]:checked + label:after {
+    opacity: 1;
+}
+
+.progress-wrapper {
+    border: var(--border-thickness) solid var(--text-color);
+    height: var(--line-height);
+    overflow: hidden;
+    border-radius: 1rem;
+    margin-bottom: var(--line-height);
+}
+.progress-wrapper progress {
+    font-family: var(--font-family-mono);
+    border-radius: 0;
+    width: 100%;
+    vertical-align: top;
+}
+.progress-wrapper progress::-webkit-progress-bar {
+    background-color: var(--background-color);
+}
+.progress-wrapper progress::-webkit-progress-value {
+    background-color: var(--color-pink);
+    height: calc(var(--line-height) / 2);
+    margin: 3px;
+    border-radius: 1rem;
+}
+
+p + ul, h3 + ul {
     margin-top: -1rem;
 }
 
 ul {
-    list-style: square;
+/*    list-style: square;*/
     margin: 2rem 0;
 }
 ul.columns {
@@ -272,6 +340,7 @@ li {
     margin-bottom: 0.25rem;
     line-height: 1.5rem;
 }
+
 table {
     border-collapse: collapse;
 }
@@ -281,28 +350,31 @@ table:not(.header) td {
     border-color: var(--color-grey);
 }
 
-.header {
+table.header {
     top: calc(var(--line-height) / 2);
     width: 100%;
     border-collapse: collapse;
-    margin: 0 0 calc(var(--line-height) * 2);
-}
-
-.header {
+/*    margin: 0 0 calc(var(--line-height) * 2);*/
     margin: var(--line-height) 0 var(--line-height);
-    margin-bottom: calc(var(--line-height)* 2);
+    margin-bottom: calc(var(--line-height) * 2);
 }
-.header h1 {
+/*table.header {
+    margin: var(--line-height) 0 var(--line-height);
+    margin-bottom: calc(var(--line-height) * 2);
+}*/
+table.header h1 {
     margin: 0;
 }
-.header tr td:last-child {
+table.header tr td:last-child {
     text-align: right;
 }
+
 hr {
     margin: 2rem 0;
     border-style: solid;
     border-color: var(--color-grey-light);
 }
+
 mark {
     padding: 2px 8px;
     font-weight: var(--font-weight-bold);
@@ -310,31 +382,29 @@ mark {
     color: var(--color-grey);
     font-size: calc(var(--font-size) - var(--font-size)/4);
 }
-#footer {
+
+/*#footer {
     margin: 2rem 0;
     padding-bottom: 2rem;
 }
 #footer p {
     color: var(--color-grey);
     margin: 0;
-}
+}*/
 
 /* code highlight */
 
-.highlight .k          { color: var(--color-pink) !important; }
-.highlight .n          { color: var(--color-dark) !important; }
-.highlight .kn         { color: var(--color-dark) !important; }
+.highlight .k { color: var(--color-pink) !important; }
+.highlight .n { color: var(--color-dark) !important; }
+.highlight .kn { color: var(--color-dark) !important; }
 
-.highlight .s1,
-.highlight .si         { color: var(--color-grey) !important; }
+.highlight .s1, .highlight .si { color: var(--color-grey) !important; }
 
-.highlight .c1,
-.highlight .cm         { color: var(--color-grey) !important; }
+.highlight .c1, .highlight .cm { color: var(--color-grey) !important; }
 
-.highlight .mi         { color: var(--color-blue) !important; }
+.highlight .mi { color: var(--color-blue) !important; }
 
-.highlight .nf,
-.highlight .nb         { color: var(--color-blue) !important; }
+.highlight .nf, .highlight .nb { color: var(--color-blue) !important; }
 
 .highlight .nc {
     color: var(--color-blue) !important;
@@ -410,20 +480,67 @@ mark {
 <input type='checkbox' id='dark-mode-toggle'>
 <label for='dark-mode-toggle' class='toggle'><span></span></label>
 </div>
-</h3></div><h1>My first blog post</h1>
-<p><em>Oct 22, 2023</em></p>
-<h3>Contents</h3><ul class='toc'>
-
+</h3></div><table class="header">
+<tbody>
+<tr>
+<td class="width-auto" colspan="2" rowspan="2">
+<h1 class="title">My first blog post</h1>
+</td>
+<th>Date</th>
+<td class="width-min">
+<time style="white-space: pre;">2023-10-22</time>
+</td>
+</tr>
+<tr>
+<th>Author</th>
+<td class="width-min">
+<a class="mono" href="https://x.com/asyncze">
+<cite>@asyncze</cite>
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Contents</h3><ul class="toc">
 <li><a href="#Hello there">Hello there</a><ul>
 <li><a href="#This is a smaller header">This is a smaller header</a></li>
 </ul>
 </li>
 </ul>
-<h2>Hello there <a name='Hello there'></a> <a class='anchor' href='#Hello there'>#</a></h2>
+<h2>Hello there <a name="Hello there"></a> <a class="anchor" href="#Hello there">#</a></h2>
 <p>Hello and welcome to my new blog.</p>
-<h3>This is a smaller header <a name='This is a smaller header'></a> <a class='anchor' href='#This is a smaller header'>#</a></h3>
-<p>Write something cool here.</p>
-<p><em>Updated on Apr 11, 2025</em></p></div><script>document.addEventListener("DOMContentLoaded", function() {
+<div class="highlight"><pre><span></span><span class="c1">-- Comment</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">PI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.14159</span>
+
+<span class="kd">local</span><span class="w"> </span><span class="kr">function</span><span class="w"> </span><span class="nf">calculateArea</span><span class="p">(</span><span class="nv">radius</span><span class="p">)</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="nv">radius</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="kr">then</span>
+<span class="w">        </span><span class="nb">error</span><span class="p">(</span><span class="s2">"Radius must be greater than zero"</span><span class="p">)</span>
+<span class="w">    </span><span class="kr">end</span>
+<span class="w">    </span><span class="kr">return</span><span class="w"> </span><span class="nv">PI</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">radius</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">radius</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span><span class="w"> </span><span class="nv">numbers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">}</span>
+
+<span class="kr">for</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="nv">numbers</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nb">print</span><span class="p">(</span><span class="s2">"Number:"</span><span class="p">,</span><span class="w"> </span><span class="nv">numbers</span><span class="p">[</span><span class="nv">i</span><span class="p">])</span>
+<span class="kr">end</span>
+</pre></div>
+
+<h3>This is a smaller header <a name="This is a smaller header"></a> <a class="anchor" href="#This is a smaller header">#</a></h3>
+<p>Write something else here.</p>
+<div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Class</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Docstring</span>
+<span class="sd">    """</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">istrue</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">istrue</span> <span class="o">=</span> <span class="n">istrue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">"</span>
+</pre></div>
+
+<p><em>Updated on Apr 11, 2025: Added some code examples.</em></p></div><script>document.addEventListener("DOMContentLoaded", function() {
     // toggle theme
     try {
         var theme = document.querySelector("#dark-mode-toggle");
