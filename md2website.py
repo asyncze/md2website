@@ -82,32 +82,32 @@ def write_header(file, title="md2website", root=0):
     file.write(f"""
         <style>
         @font-face {{
-            font-family: "Hack";
+            font-family: "Code";
             src: url("{ '../' * distance_from_root }__static/Hack-Regular.ttf") format("truetype");
             font-weight: normal;
             font-style: normal;
         }}
         @font-face {{
-            font-family: "Hack";
+            font-family: "Code";
             src: url("{ '../' * distance_from_root }__static/Hack-Bold.ttf") format("truetype");
             font-weight: bold;
             font-style: normal;
         }}
         @font-face {{
-            font-family: "LibreBaskerville";
+            font-family: "Serif";
             src: url("{ '../' * distance_from_root }__static/LibreBaskerville-Regular.ttf") format("truetype");
             font-weight: normal;
             font-style: normal;
         }}
         @font-face {{
-            font-family: "LibreBaskerville";
+            font-family: "Serif";
             src: url("{ '../' * distance_from_root }__static/LibreBaskerville-Bold.ttf") format("truetype");
             font-weight: bold;
             font-style: normal;
         }}
         @font-face {{
-            font-family: "LibreBaskerville";
-            src: url("{ '../' * distance_from_root }__static/LibreBaskerville-Italic.ttf") format("truetype");
+            font-family: "Serif";
+            src: url("{ '../' * distance_from_root }__static/IndieFlower-Regular.ttf") format("truetype");
             font-weight: normal;
             font-style: italic;
         }}
