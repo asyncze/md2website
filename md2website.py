@@ -204,20 +204,22 @@ def generate_checklist_from_list(file_content):
             line = line.split("[X]")[1].strip().replace("</li>", "")
             result.append(f"""
                 <li>
-                    <label>
-                        <input type="checkbox" checked disabled>
-                        <span>{ line }</span>
-                    </label>
+                    <div class="round">
+                        <input type="checkbox" id="checkbox" checked disabled>
+                        <label for="checkbox"></label>
+                    </div>
+                    <span>{ line }</span>
                 </li>
             """)
         elif checklist == True and "[ ]" in line:
             line = line.split("[ ]")[1].strip().replace("</li>", "")
             result.append(f"""
                 <li>
-                    <label>
-                        <input type="checkbox" disabled>
-                        <span>{ line }</span>
-                    </label>
+                    <div class="round">
+                        <input type="checkbox" id="checkbox" disabled>
+                        <label for="checkbox"></label>
+                    </div>
+                    <span>{ line }</span>
                 </li>
             """)
         elif checklist == True and "</ul>" in line:
@@ -344,6 +346,7 @@ def main_driver():
                 
                 posts_lst = [] # [ { title, date, url } ]
                 posts_dict = {} # { category: { subcategory: [ { title, date, url } ] } }
+                
                 # for each md file in dir_, create html page and append to posts_lst or posts_dict
                 for root, dirs, posts in os.walk(f"{SOURCE_PATH}/{dir_}"):
                     root = root.replace(f"{SOURCE_PATH}/", "")
@@ -372,20 +375,26 @@ def main_driver():
                                     # title
                                     try:
                                         post_title = post_content.split("\n")[0].split("# ")[1]
-                                        # post_content = "\n".join(post_content.split("\n")[2:]) # skip two lines (assuming empty line after each)
-                                    except: pass
+                                        post_content = "\n".join(post_content.split("\n")[2:]) # skip two lines (assuming empty line after each)
+
+                                        print(post_title)
+
+                                    except Exception as e: print(e)
                                     
                                     # date
                                     try:
-                                        date = post_content.split("\n")[2].split("*")[1]
+                                        date = post_content.split("\n")[0].split("*")[1]
+
+                                        print(date)
                                             
                                         date_formatted = datetime.strptime(date, "%B %d, %Y")
                                         date_formatted = date_formatted.strftime("%Y-%m-%d")
 
                                         date_is_outdated = True if datetime.strptime(date, "%B %d, %Y").year + 2 < datetime.now().year else False
                                             
-                                        # post_content = "\n".join(post_content.split("\n")[2:])
-                                    except: pass
+                                        post_content = "\n".join(post_content.split("\n")[2:])
+                                    
+                                    except Exception as e: print(e)
                                     
                                     # # subtitle
                                     # try:
@@ -398,30 +407,29 @@ def main_driver():
                                     # except: pass
                                     
                                     # create post title
-                                    # post_content = f"""
-                                    #     <table class="header">
-                                    #         <tbody>
-                                    #             <tr>
-                                    #                 <td colspan="2" rowspan="2" class="width-auto">
-                                    #                     <h1 class="title">{ post_title }</h1>
-                                    #                     <span class="subtitle">{ post_subtitle if not post_subtitle == None else "" }</span>
-                                    #                 </td>
-                                    #                 <th>Date</th>
-                                    #                 <td class="width-min">
-                                    #                     <time style="white-space: pre;">{ "<mark>" if date_is_outdated else "" }{ date_formatted }{ "</mark>" if date_is_outdated else "" }</time>
-                                    #                 </td>
-                                    #             </tr>
-                                    #             <tr>
-                                    #                 <th>Author</th>
-                                    #                 <td class="width-min">
-                                    #                     <a href="{ X_URL }" class="mono">
-                                    #                         <cite>{ AUTHOR }</cite>
-                                    #                     </a>
-                                    #                 </td>
-                                    #             </tr>
-                                    #         </tbody>
-                                    #     </table>
-                                    # """.replace("    ", "") + post_content
+                                    post_content = f"""
+                                        <table class="header">
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="2" rowspan="2" class="width-auto">
+                                                        <h1 class="title">{ post_title }</h1>
+                                                    </td>
+                                                    <th>Date</th>
+                                                    <td class="width-min">
+                                                        <time style="white-space: pre;">{ "<mark>" if date_is_outdated else "" }{ date_formatted }{ "</mark>" if date_is_outdated else "" }</time>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Author</th>
+                                                    <td class="width-min">
+                                                        <a href="{ X_URL }" class="mono">
+                                                            <cite>{ AUTHOR }</cite>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    """.replace("    ", "") + post_content
                                     
                                     # categories
                                     try: category, subcategory = root.split("/")[1], root.split("/")[2]
