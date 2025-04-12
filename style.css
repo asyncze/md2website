@@ -111,11 +111,9 @@ a:hover {
 a:link, a:visited {
     color: var(--text-color);
 }
-
 p {
     margin-bottom: var(--line-height);
 }
-
 strong {
     font-weight: var(--font-weight-bold);
 }
