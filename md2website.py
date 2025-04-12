@@ -122,14 +122,14 @@ def write_header(file, title="md2website", root=0):
     # google tag
     file.write(GOOGLE_TAG) if not GOOGLE_TAG == "" else 0
     # page
-    file.write("<div class='page'>")
+    file.write("<div>")
     # nav
     if os.path.exists(f"{SOURCE_PATH}/nav.md"):
         nav_file = open(f"{SOURCE_PATH}/nav.md", "r")
         nav_content = nav_file.read()
         nav_file.close()
         if len(nav_content) > 0:
-            file.write("<div class='nav no-print'>")
+            file.write("<div class='nav'>")
 
             nav_content_html = markdown.markdown(nav_content)
             # nav_content_html = nav_content_html.replace("</h3>", "") + """
@@ -137,13 +137,20 @@ def write_header(file, title="md2website", root=0):
             #         <input type="checkbox" class="invert-toggle">
             #     </label>
             # """.replace("    ", "")
-            nav_content_html = nav_content_html.replace("</h3>", "") + """
-                <span class='toggle-wrapper'>
-                    <input type="checkbox" class="sr-only" id="theme">
-                    <label for="theme" class="toggle">
-                        <span>Theme</span>
-                    </label>
-                </span>
+            nav_content_html = nav_content_html.replace("</h3>", "")
+            # nav_content_html = nav_content_html + """
+            #     <span class='toggle-wrapper'>
+            #         <input type="checkbox" class="sr-only" id="dark-mode-toggle">
+            #         <label for="dark-mode-toggle" class="toggle">
+            #             <span>Theme</span>
+            #         </label>
+            #     </span>
+            # """.replace("    ", "")
+            nav_content_html = nav_content_html + """
+                <div class='toggle-wrapper'>
+                    <input type='checkbox' id='dark-mode-toggle'>
+                    <label for='dark-mode-toggle' class='toggle'><span></span></label>
+                </div>
             """.replace("    ", "")
             nav_content_html = nav_content_html + "</h3>"
             
@@ -152,7 +159,7 @@ def write_header(file, title="md2website", root=0):
             file.write("</div>")
         else:
             # empty nav for aligned padding across pages
-            file.write("<div class='nav no-print'><p></p></div>")
+            file.write("<div class='nav'><p></p></div>")
 
 def write_footer(file):
     # credits
